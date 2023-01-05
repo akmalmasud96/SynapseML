@@ -51,35 +51,6 @@ jobs:
         black --diff --color . && black --check -q .
       displayName: 'Python Style Check'
 
-- job: PublishFeed
-  pool:
-    vmImage: ubuntu-20.04
-  steps:
-    - template: templates/kv.yml
-    - task: MavenAuthenticate@0
-      name: mavenAuthPublicPackages
-      displayName: Authenticate with SynapseML_PublicPackages
-      inputs:
-        artifactsFeeds: SynapseML_PublicPackages
-        mavenServiceConnections: SynapseML_PublicPackages-Feed-Connection
-    - task: AzureCLI@2
-      displayName: 'Publish Library to Internal Feed'
-      inputs:
-        azureSubscription: 'MMLSpark Build'
-        scriptType: bash
-        scriptLocation: inlineScript
-        inlineScript: 'sbt aetherDeploy'
-      env:
-        DEPLOYMENT_NAME: $(Build.Repository.Name)-$(Build.BuildId)
-        ADO-FEED-TOKEN: $(ado-feed-token)
-        STORAGE-KEY: $(storage-key)
-        NEXUS-UN: $(nexus-un)
-        NEXUS-PW: $(nexus-pw)
-        PGP-PRIVATE: $(pgp-private)
-        PGP-PUBLIC: $(pgp-public)
-        PGP-PW: $(pgp-pw)
-        SYNAPSEML_ENABLE_PUBLISH: true
-
 - job: Publish
   cancelTimeoutInMinutes: 0
   pool:
