@@ -71,7 +71,8 @@ jobs:
         sudo apt-get install graphviz doxygen -y
         source activate synapseml
         sbt packagePython
-        sbt aetherDeploy publishBlob publishDocs publishR publishPython
+        sbt aetherDeploy
+        sbt publishBlob publishDocs publishR publishPython
         sbt publishSigned
         sbt genBuildInfo
         echo "##vso[task.uploadsummary]$(pwd)/target/Build.md"
